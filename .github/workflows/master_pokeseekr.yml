@@ -57,8 +57,22 @@ jobs:
       - name: Set up App Settings
         shell: pwsh
         run: |
+          Write-Host "Current directory: $(Get-Location)"
+          Write-Host "Listing directory contents:"
+          Get-ChildItem -Path . | Format-Table -AutoSize
+          
           $appSettingsPath = "./appsettings.json"
-          $appSettings = Get-Content $appSettingsPath | ConvertFrom-Json
+          
+          Write-Host "Checking if $appSettingsPath exists: $(Test-Path $appSettingsPath)"
+          
+          # Create or load the appsettings.json file
+          if (Test-Path $appSettingsPath) {
+            Write-Host "Loading existing appsettings.json"
+            $appSettings = Get-Content $appSettingsPath | ConvertFrom-Json
+          } else {
+            Write-Host "Creating new appsettings.json"
+            $appSettings = New-Object -TypeName PSObject
+          }
           
           # Add your secret configuration here
           $appSettings | Add-Member -Type NoteProperty -Name "PokemonTcg" -Value @{
@@ -72,6 +86,13 @@ jobs:
           } -Force
           
           $appSettings | ConvertTo-Json -Depth 10 | Set-Content $appSettingsPath
+          
+          Write-Host "Checking if $appSettingsPath exists after update: $(Test-Path $appSettingsPath)"
+          Write-Host "Content of appsettings.json (sanitized):"
+          $content = Get-Content $appSettingsPath -Raw
+          $content = $content -replace '"ApiKey"\s*:\s*"[^"]*"', '"ApiKey": "[REDACTED]"'
+          $content = $content -replace '"DefaultConnection"\s*:\s*"[^"]*"', '"DefaultConnection": "[REDACTED]"'
+          Write-Host $content
       
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
