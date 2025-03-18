@@ -1,0 +1,48 @@
+@baseUrl = https://localhost:7004
+
+### Search with all parameters
+POST {{baseUrl}}/Query/search
+Content-Type: application/json
+
+{
+    "name": "Charizard",
+    "rarity": "Rare"
+}
+
+### Search by name only
+POST {{baseUrl}}/Query/search
+Content-Type: application/json
+
+{
+    "name": "Pikachu"
+}
+
+### Search by rarity only
+POST {{baseUrl}}/Query/search
+Content-Type: application/json
+
+{
+    "rarity": "Rare"
+}
+
+### Search by artist only
+POST {{baseUrl}}/Query/search
+Content-Type: application/json
+
+{
+    "artist": "AKABANE"
+}
+
+### Search by color only
+POST {{baseUrl}}/Query/search
+Content-Type: application/json
+
+{
+    "color": [0.8, 0.1, 0.1]
+}
+
+### Empty search (should return all cards)
+POST {{baseUrl}}/Query/search
+Content-Type: application/json
+
+{} 
