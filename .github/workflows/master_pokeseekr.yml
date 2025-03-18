@@ -22,10 +22,16 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
-
+          
+      - name: Restore dependencies
+        run: dotnet restore
+          
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: dotnet build --configuration Release --no-restore
 
+      - name: Run tests
+        run: dotnet test --configuration Release --no-build
+        
       - name: dotnet publish
         run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
 
@@ -47,6 +53,25 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: .net-app
+          
+      - name: Set up App Settings
+        shell: pwsh
+        run: |
+          $appSettingsPath = "./appsettings.json"
+          $appSettings = Get-Content $appSettingsPath | ConvertFrom-Json
+          
+          # Add your secret configuration here
+          $appSettings | Add-Member -Type NoteProperty -Name "PokemonTcg" -Value @{
+            "ApiKey" = "${{ secrets.POKEMON_TCG_API_KEY }}"
+          } -Force
+          
+          # Add any other configuration settings
+          # Example for database connection string
+          $appSettings | Add-Member -Type NoteProperty -Name "ConnectionStrings" -Value @{
+            "DefaultConnection" = "${{ secrets.DB_CONNECTION_STRING }}"
+          } -Force
+          
+          $appSettings | ConvertTo-Json -Depth 10 | Set-Content $appSettingsPath
       
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
