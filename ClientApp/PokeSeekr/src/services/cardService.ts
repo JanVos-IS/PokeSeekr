@@ -79,7 +79,7 @@ interface SearchParams {
   color: [number, number, number] | null;
 }
 
-const API_BASE_URL = 'https://localhost:7004';
+const API_BASE_URL = 'https://pokeseekr.azurewebsites.net';
 
 export const searchCards = async (params: SearchParams): Promise<Card[]> => {
   const response = await fetch(`${API_BASE_URL}/query/search`, {

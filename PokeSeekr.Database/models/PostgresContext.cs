@@ -35,8 +35,8 @@ public partial class PostgresContext : DbContext
     {
         if (!optionsBuilder.IsConfigured)
         {
-            var connectionString = _configuration.GetConnectionString("DefaultConnection");
-            
+            var connectionString = _configuration["DB_CONNECTION_STRING"];
+
             // Fallback to hardcoded connection string only if not found in user secrets
             if (string.IsNullOrEmpty(connectionString))
             {
