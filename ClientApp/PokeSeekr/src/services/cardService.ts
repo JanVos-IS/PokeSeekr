@@ -52,8 +52,7 @@ export interface Card {
   downloaded: boolean | null;
   averageColor: [number, number, number];
   setName: string;
-  imageUrl: string; // For backward compatibility
-  // Additional properties from PokemonTcgSdk
+  imageUrl: string;
   evolvesTo: string | null;
   regulationMark: string | null;
   types: string | null;

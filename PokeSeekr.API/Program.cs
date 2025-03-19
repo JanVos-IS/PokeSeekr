@@ -6,6 +6,9 @@ using PokeSeekr.Database.Repositories;
 using PokemonTcgSdk;
 using PokemonTcgSdk.Standard.Infrastructure.HttpClients;
 using System.Text.Json.Serialization;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +23,17 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddDbContext<PostgresContext>();
+
+builder.Services.AddDbContext<PostgresContext>(optionsBuilder => {
+    var connectionString = builder.Configuration["DB_CONNECTION_STRING"];
+
+    if (string.IsNullOrEmpty(connectionString))
+    {
+        throw new InvalidOperationException("Connection string not found in user secrets or appsettings.json");
+    }
+
+    optionsBuilder.UseNpgsql(connectionString, o => o.UseVector());
+});
 
 // Register PokemonApiClient as a singleton with API key from user secrets
 var pokemonTcgApiKey = builder.Configuration["PokemonTcg:ApiKey"];
