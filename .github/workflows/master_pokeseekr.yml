@@ -81,9 +81,7 @@ jobs:
           
           # Add any other configuration settings
           # Example for database connection string
-          $appSettings | Add-Member -Type NoteProperty -Name "ConnectionStrings" -Value @{
-            "DefaultConnection" = "${{ secrets.DB_CONNECTION_STRING }}"
-          } -Force
+          $appSettings | Add-Member -Type NoteProperty -Name "DB_CONNECTION_STRING" -Value "${{ secrets.DB_CONNECTION_STRING }}" -Force
           
           $appSettings | ConvertTo-Json -Depth 10 | Set-Content $appSettingsPath
           
