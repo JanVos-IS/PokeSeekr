@@ -44,6 +44,7 @@ jobs:
         uses: azure/CLI@v1
         with:
           inlineScript: |
+            az storage blob upload-batch \
               --auth-mode key \
               --account-key ${{ secrets.AZURE_STORAGE_KEY }} \
               --destination '$web' \
