@@ -45,9 +45,3 @@ jobs:
         with:
           inlineScript: |
             az storage blob upload-batch --destination '$web' --source ClientApp/PokeSeekr/dist --auth-mode key --account-name pokeseekrui --account-key ${{ secrets.AZURE_STORAGE_KEY }} 
-
-        # Azure logout
-      - name: logout
-        run: |
-          az logout
-        if: always()
