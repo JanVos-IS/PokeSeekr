@@ -44,12 +44,7 @@ jobs:
         uses: azure/CLI@v1
         with:
           inlineScript: |
-            az storage blob upload-batch \
-              --auth-mode key \
-              --account-name pokeseekrui \
-              --account-key ${{ secrets.AZURE_STORAGE_KEY }} \
-              --destination '$web' \
-              --source ClientApp/PokeSeekr/dist
+            az storage blob upload-batch --destination '$web' --source ClientApp/PokeSeekr/dist --auth-mode key --account-name pokeseekrui --account-key ${{ secrets.AZURE_STORAGE_KEY }} 
 
         # Azure logout
       - name: logout
