@@ -46,6 +46,7 @@ jobs:
           inlineScript: |
             az storage blob upload-batch \
               --auth-mode key \
+              --account-name pokeseekrui \
               --account-key ${{ secrets.AZURE_STORAGE_KEY }} \
               --destination '$web' \
               --source ClientApp/PokeSeekr/dist
