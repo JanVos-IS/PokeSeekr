@@ -40,20 +40,12 @@ jobs:
           cd ClientApp/PokeSeekr
           npm run build
       
-      - name: Azure Login
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      
       - name: Upload to Azure Storage
         uses: azure/CLI@v1
         with:
           inlineScript: |
-              az storage blob upload-batch \
               --auth-mode key \
-              --account-name pokeseekrui \
+              --account-key ${{ secrets.AZURE_STORAGE_KEY }} \
               --destination '$web' \
               --source ClientApp/PokeSeekr/dist
 
