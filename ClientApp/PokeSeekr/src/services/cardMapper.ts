@@ -1,0 +1,37 @@
+import { CardResponse } from '../interfaces/CardResponse'; // Adjust the import path as necessary
+import { Card } from '../interfaces/Card'; // Adjust the import path as necessary
+
+export const mapCardResponseToCard = (card: CardResponse): Card => ({
+  id: card.pokemonCardId,
+  tcgId: card.tcgId,
+  name: card.name,
+  supertype: card.supertype,
+  level: card.level,
+  hp: card.hp,
+  evolvesFrom: card.evolvesFrom,
+  number: card.number,
+  artist: card.artist,
+  rarity: card.rarity,
+  flavorText: card.flavorText,
+  imageSmall: card.imageSmall,
+  imageLarge: card.imageLarge,
+  downloaded: card.downloaded,
+  averageColor: card.averageColor,
+  setName: card.setName,
+  imageUrl: card.imageLarge || card.imageSmall, // Prefer large image if available
+  evolvesTo: card.evolvesTo,
+  regulationMark: card.regulationMark,
+  types: card.types,
+  subtypes: card.subtypes,
+  rules: card.rules,
+  legalities: card.legalities,
+  attacks: card.attacks,
+  weaknesses: card.weaknesses,
+  resistances: card.resistances,
+  abilities: card.abilities,
+  tcgUrl: card.tcgUrl,
+  cardMarket: card.cardMarket,
+  tcgPlayerPriceNormal: card.tcgPlayerPriceNormal,
+  tcgPlayerPriceHolofoil: card.tcgPlayerPriceHolofoil,
+  cardMarketPrice: card.cardMarketPrice,
+});

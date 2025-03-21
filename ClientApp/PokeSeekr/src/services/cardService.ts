@@ -1,84 +1,10 @@
-// Backend response type
-interface CardResponse {
-  pokemonCardId: number;
-  tcgId: string;
-  name: string;
-  supertype: string;
-  level: string | null;
-  hp: string | null;
-  evolvesFrom: string | null;
-  number: string;
-  artist: string;
-  rarity: string;
-  flavorText: string | null;
-  imageSmall: string;
-  imageLarge: string;
-  downloaded: boolean | null;
-  averageColor: [number, number, number];
-  setName: string;
-  // Additional properties from PokemonTcgSdk
-  evolvesTo: string | null;
-  regulationMark: string | null;
-  types: string | null;
-  subtypes: string | null;
-  rules: string | null;
-  legalities: string | null;
-  attacks: string | null;
-  weaknesses: string | null;
-  resistances: string | null;
-  abilities: string | null;
-  tcgUrl: string | null;
-  cardMarket: string | null;
-  tcgPlayerPriceNormal: number | null;
-  tcgPlayerPriceHolofoil: number | null;
-  cardMarketPrice: number | null;
-}
+import apiConfig from '../config/apiConfig'; // Adjust the import path as necessary
+import { mapCardResponseToCard } from './cardMapper'; // Adjust the import path as necessary
+import { CardResponse } from '../interfaces/CardResponse'; // Adjust the import path as necessary
+import { Card } from '../interfaces/Card'; // Adjust the import path as necessary
+import { SearchParams } from '../interfaces/SearchParams'; // Adjust the import path as necessary
 
-// Frontend card type
-export interface Card {
-  id: number;
-  tcgId: string;
-  name: string;
-  supertype: string;
-  level: string | null;
-  hp: string | null;
-  evolvesFrom: string | null;
-  number: string;
-  artist: string;
-  rarity: string;
-  flavorText: string | null;
-  imageSmall: string;
-  imageLarge: string;
-  downloaded: boolean | null;
-  averageColor: [number, number, number];
-  setName: string;
-  imageUrl: string;
-  evolvesTo: string | null;
-  regulationMark: string | null;
-  types: string | null;
-  subtypes: string | null;
-  rules: string | null;
-  legalities: string | null;
-  attacks: string | null;
-  weaknesses: string | null;
-  resistances: string | null;
-  abilities: string | null;
-  tcgUrl: string | null;
-  cardMarket: string | null;
-  tcgPlayerPriceNormal: number | null;
-  tcgPlayerPriceHolofoil: number | null;
-  cardMarketPrice: number | null;
-}
-
-interface SearchParams {
-  name: string | null;
-  rarity: string | null;
-  artist: string | null;
-  set: string | null;
-  color: [number, number, number] | null;
-}
-
-const API_BASE_URL = 'https://pokeseekr.azurewebsites.net';
+const API_BASE_URL = apiConfig.baseUrl;
 
 export const searchCards = async (params: SearchParams): Promise<Card[]> => {
   const response = await fetch(`${API_BASE_URL}/query/search`, {
@@ -102,40 +28,7 @@ export const searchCards = async (params: SearchParams): Promise<Card[]> => {
   const data: CardResponse[] = await response.json();
   
   // Map the backend response to the frontend card format
-  return data.map(card => ({
-    id: card.pokemonCardId,
-    tcgId: card.tcgId,
-    name: card.name,
-    supertype: card.supertype,
-    level: card.level,
-    hp: card.hp,
-    evolvesFrom: card.evolvesFrom,
-    number: card.number,
-    artist: card.artist,
-    rarity: card.rarity,
-    flavorText: card.flavorText,
-    imageSmall: card.imageSmall,
-    imageLarge: card.imageLarge,
-    downloaded: card.downloaded,
-    averageColor: card.averageColor,
-    setName: card.setName,
-    imageUrl: card.imageLarge || card.imageSmall, // Prefer large image if available
-    evolvesTo: card.evolvesTo,
-    regulationMark: card.regulationMark,
-    types: card.types,
-    subtypes: card.subtypes,
-    rules: card.rules,
-    legalities: card.legalities,
-    attacks: card.attacks,
-    weaknesses: card.weaknesses,
-    resistances: card.resistances,
-    abilities: card.abilities,
-    tcgUrl: card.tcgUrl,
-    cardMarket: card.cardMarket,
-    tcgPlayerPriceNormal: card.tcgPlayerPriceNormal,
-    tcgPlayerPriceHolofoil: card.tcgPlayerPriceHolofoil,
-    cardMarketPrice: card.cardMarketPrice,
-  }));
+  return data.map(mapCardResponseToCard);
 };
 
 export const getArtists = async (): Promise<string[]> => {
@@ -168,4 +61,4 @@ export const getSets = async (): Promise<string[]> => {
   // The API returns Set objects, but we only need the names for the dropdown
   const sets = await response.json();
   return sets.map((set: { name: string }) => set.name);
-}; 
+};
