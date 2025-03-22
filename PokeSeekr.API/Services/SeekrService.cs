@@ -14,6 +14,7 @@ namespace PokeSeekr.API.Services
         Task<List<string>> GetArtistsAsync();
         Task<List<string>> GetRaritiesAsync();
         Task<List<Set>> GetSetsAsync();
+        Task<List<PokemonCardDto>> GetCardsByTcgIdsAsync(List<string> tcgIds);
     }   
 
     public class SeekrService : ISeekrService
@@ -49,6 +50,11 @@ namespace PokeSeekr.API.Services
         public async Task<List<Set>> GetSetsAsync()
         {
             return await Task.FromResult(_setRepo.GetSets().ToList());
+        }
+
+        public Task<List<PokemonCardDto>> GetCardsByTcgIdsAsync(List<string> tcgIds)
+        {
+            return _cardRepo.GetCardsByTcgIdsAsync(tcgIds);
         }
     }
 }

@@ -1,9 +1,8 @@
-import { Card as CardType } from '../services/cardService';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
 import { Button } from './ui/button';
 import { X, ExternalLink } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
-
+import { Card } from '@/interfaces/Card';
 // Function to safely parse JSON with error handling
 const safeParseJson = (jsonString: string | null): any => {
   if (!jsonString) return null;
@@ -16,7 +15,7 @@ const safeParseJson = (jsonString: string | null): any => {
 };
 
 interface CardDetailViewProps {
-  card: CardType | null;
+  card: Card | null;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -79,6 +78,8 @@ export function CardDetailView({ card, isOpen, onClose }: CardDetailViewProps) {
   const rgbColor = card.averageColor ? 
     `rgb(${Math.round(card.averageColor[0] * 255)}, ${Math.round(card.averageColor[1] * 255)}, ${Math.round(card.averageColor[2] * 255)})` : 
     'transparent';
+
+  //const collections = GetCollections();
 
   return (
     <Dialog open={isOpen} onOpenChange={(open: boolean) => !open && onClose()}>
@@ -151,7 +152,7 @@ export function CardDetailView({ card, isOpen, onClose }: CardDetailViewProps) {
               style={{
                 opacity: isHovering ? 0.5 : 0,
                 transition: 'opacity 0.2s ease',
-                background: `linear-gradient(
+                backgroundImage: `linear-gradient(
                   ${gradientRotation}deg, 
                   rgba(255,0,0,0) 0%, 
                   rgba(255,0,0,0.2) 25%, 

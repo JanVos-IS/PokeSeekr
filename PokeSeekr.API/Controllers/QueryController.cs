@@ -70,5 +70,19 @@ namespace PokeSeekr.API.Controllers
                 return BadRequest(new { error = ex.Message });
             }
         }
+
+        [HttpPost("cards/tcgids")]
+        public async Task<ActionResult<List<PokemonCardDto>>> GetCardsByTcgIds([FromBody] List<string> tcgIds)
+        {
+            try
+            {
+                List<PokemonCardDto> cards = await _seekrService.GetCardsByTcgIdsAsync(tcgIds);
+                return Ok(cards);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
     }
 }

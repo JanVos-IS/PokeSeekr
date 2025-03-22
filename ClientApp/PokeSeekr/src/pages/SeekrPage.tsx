@@ -1,12 +1,13 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { PokemonCard } from '../../components/PokemonCard';
-import { SearchFilters } from '../../components/SearchFilters';
-import { searchCards, type Card } from '../../services/cardService';
-import { CardDetailView } from '../../components/CardDetailView';
+import { PokemonCard } from '../components/PokemonCard';
+import { SearchFilters } from '../components/SearchFilters';
+import { CardDetailView } from '../components/CardDetailView';
+import { Card } from '@/interfaces/Card';
+import { searchCards } from '@/services/cardService';
 
 export default function SeekrPage() {
   const [nameFilter, setNameFilter] = useState('');
-  const [rarityFilter, setRarityFilter] = useState('all');
+  const [rarityFilter, setRarityFilter] = useState('Illustration Rare');
   const [artistFilter, setArtistFilter] = useState('all');
   const [setFilter, setSetFilter] = useState('all');
   const [colorFilter, setColorFilter] = useState<[number, number, number] | null>(null);
@@ -68,6 +69,13 @@ export default function SeekrPage() {
   }, [isLoading, hasMore, loadMoreCards, page]);
 
   const handleSearch = async () => {
+
+    // Ensure at least one search property is filled
+    if (!nameFilter.trim() && rarityFilter === 'all' && artistFilter === 'all' && setFilter === 'all' && !colorFilter) {
+      alert('Please fill at least one search property.');
+      return;
+    }
+
     setIsLoading(true);
     // Clear existing results before making a new search
     setVisibleCards([]);
@@ -104,7 +112,6 @@ export default function SeekrPage() {
     setIsDetailViewOpen(false);
   };
 
-  // Add a debug message at the bottom of the card list
   const renderEndMessage = () => {
     if (isLoading && page > 1) {
       return <div className="col-span-full text-center py-4">Loading more...</div>;
@@ -158,4 +165,4 @@ export default function SeekrPage() {
       />
     </div>
   );
-} 
+}

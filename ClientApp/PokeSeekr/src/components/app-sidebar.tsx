@@ -3,6 +3,7 @@ import {
   Sparkles,
 } from "lucide-react"
 import { Link } from "react-router-dom"
+import { useState, useEffect } from "react"
 
 import { NavFavorites } from "@/components/nav-favorites"
 import {
@@ -12,9 +13,15 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 import { ModeToggle } from "./mode-toggle"
+import AddCollectionButton from "./add-collection-button"
+import { DeleteCollection, GetCollections } from "@/services/lsCollectionRepo"
+import { Collection } from "@/interfaces/Collection"
+import { NavCollections } from "./nav-collections"
 
-// This is sample data.
-const data = {
+let data: {
+  navMain: { name: string; url: string; emoji: string }[];
+  favorites: { name: string; url: string; emoji: string }[];
+} = {
   navMain: [
     {
       name: "Seekr",
@@ -28,17 +35,30 @@ const data = {
       url: "/pokemon/poliwhirl",
       emoji: "🐢",
     },
-  ],
-  collections: [
-    {
-      name: "Forest Theme",
-      url: "/collections/forest",
-      emoji: "🌳",
-    },
   ]
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const [collections, setCollections] = useState<Collection[]>([]);
+
+  useEffect(() => {
+    setCollections(GetCollections());
+  }, []);
+
+  const updateCollections = (collection: Collection) => {
+    setCollections([...collections, collection]);
+  }
+
+  const deleteCollection = (id: string) => {
+
+    if (!window.confirm("Are you sure you want to delete this collection?")) {
+      return;
+    }
+
+    DeleteCollection(id);
+    setCollections(collections.filter(c => c.id !== id));
+  }
+
   return (
     <Sidebar className="border-r-0" {...props}>
       <SidebarHeader>
@@ -47,8 +67,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavFavorites title="Search" favorites={data.navMain} />
-        <NavFavorites title="Collections" favorites={data.collections} />
-        <NavFavorites title="Favorites" favorites={data.favorites} />
+        <NavCollections title="Collections" onDelete={deleteCollection} collections={collections} endItem={<AddCollectionButton onUpdate={updateCollections}/>} /> 
       </SidebarContent>
       <SidebarRail />
     </Sidebar>

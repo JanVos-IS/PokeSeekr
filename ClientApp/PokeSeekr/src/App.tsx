@@ -3,7 +3,8 @@ import { Routes, Route } from 'react-router-dom'
 import { AppSidebar } from '@/components/app-sidebar'
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import { ThemeProvider } from "@/components/theme-provider"
-import SeekrPage from './app/dashboard/SeekrPage'
+import CollectionPage from './pages/collection'
+import SeekrPage from './pages/SeekrPage'
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
             <Routes>
               <Route path="/" element={<SeekrPage />} />
               <Route path="/seekr" element={<SeekrPage />} />
+              <Route path="/collection/:collectionId" element={<CollectionPage />} />
             </Routes>
           </div>
         </SidebarInset>

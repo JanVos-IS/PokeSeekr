@@ -14,6 +14,7 @@ namespace PokeSeekr.Database.repositories
         IEnumerable<PokemonCard> GetCards();
         Task<List<PokemonCardDto>> SearchAsync(SearchQuery query);
         void Save();
+        Task<List<PokemonCardDto>> GetCardsByTcgIdsAsync(List<string> tcgIds);
     }
 
     public class CardRepo : ICardRepo
@@ -162,9 +163,52 @@ namespace PokeSeekr.Database.repositories
             return finalSortedCardDtos;
         }
 
+
+
         public void Save()
         {
             _postgresContext.SaveChanges();
+        }
+
+        Task<List<PokemonCardDto>> ICardRepo.GetCardsByTcgIdsAsync(List<string> tcgIds)
+        {
+            var cardDtos = GetCards().Where(c => tcgIds.Contains(c.TcgId)).Select(card => new PokemonCardDto
+            {
+                PokemonCardId = card.PokemonCardId,
+                TcgId = card.TcgId,
+                Name = card.Name,
+                Supertype = card.Supertype,
+                Level = card.Level,
+                Hp = card.Hp,
+                EvolvesFrom = card.EvolvesFrom,
+                Number = card.Number,
+                Artist = card.Artist,
+                Rarity = card.Rarity,
+                FlavorText = card.FlavorText,
+                ImageSmall = card.ImageSmall,
+                ImageLarge = card.ImageLarge,
+                Downloaded = card.Downloaded,
+                AverageColor = card.AverageColor,
+                SetName = card.Set?.Name,
+                // Additional properties from PokemonTcgSdk
+                EvolvesTo = card.EvolvesTo,
+                RegulationMark = card.RegulationMark,
+                Types = card.Types,
+                Subtypes = card.Subtypes,
+                Rules = card.Rules,
+                Legalities = card.Legalities,
+                Attacks = card.Attacks,
+                Weaknesses = card.Weaknesses,
+                Resistances = card.Resistances,
+                Abilities = card.Abilities,
+                TcgUrl = card.TcgUrl,
+                CardMarket = card.CardMarket,
+                TcgPlayerPriceNormal = card.TcgPlayerPriceNormal,
+                TcgPlayerPriceHolofoil = card.TcgPlayerPriceHolofoil,
+                CardMarketPrice = card.CardMarketPrice
+            }).ToList();
+
+            return Task.FromResult(cardDtos);
         }
     }
 }

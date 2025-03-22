@@ -10,32 +10,36 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { CircleXIcon  } from "lucide-react"
+import { Collection } from "@/interfaces/Collection"
+import { DeleteCollection } from "@/services/lsCollectionRepo"
 
-export function NavFavorites({
-  favorites,
+export function NavCollections({
+  collections,
   title,
-  endItem
+  endItem,
+  onDelete
 }: {
-  favorites: {
-    name: string
-    url: string
-  }[]
+  collections: Collection[]
   title: string
-  endItem?: React.ReactNode
+  endItem?: React.ReactNode,
+  onDelete: (id: string) => void
 }) {
   const { isMobile } = useSidebar()
-
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>{title}</SidebarGroupLabel>
       <SidebarMenu>
-        {favorites.map((item) => (
-          <SidebarMenuItem key={item.name}>
+        {collections.map((c) => (
+          <SidebarMenuItem key={c.name}>
             <SidebarMenuButton asChild>
-              <Link to={item.url} title={item.name}>
-                <span>{item.name}</span>
+              <Link to={`/collections/${c.id}`} title={c.name}>
+                <span>{c.name}</span>
               </Link>
             </SidebarMenuButton>
+            <SidebarMenuAction>
+            <CircleXIcon onClick={() => onDelete(c.id)}>
+            </CircleXIcon>
+            </SidebarMenuAction>
           </SidebarMenuItem>
         ))}
         {endItem}

@@ -31,6 +31,23 @@ export const searchCards = async (params: SearchParams): Promise<Card[]> => {
   return data.map(mapCardResponseToCard);
 };
 
+export const getCardsByTcgIds = async (tcgIds: string[]): Promise<Card[]> => {
+  const response = await fetch(`${API_BASE_URL}/query/cards/tcgids`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify([...tcgIds]),
+  });
+
+  if (!response.ok) { 
+    throw new Error('Failed to fetch cards by tcgids');
+  }
+
+  const data: CardResponse[] = await response.json();
+  return data.map(mapCardResponseToCard);
+};  
+
 export const getArtists = async (): Promise<string[]> => {
   const response = await fetch(`${API_BASE_URL}/query/artists`);
   
