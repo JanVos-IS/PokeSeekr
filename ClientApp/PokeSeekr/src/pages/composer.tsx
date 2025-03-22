@@ -6,7 +6,7 @@ import { Card } from "@/interfaces/Card";
 import { PokemonCard } from "@/components/PokemonCard";
 import { CardCollectionDetailView } from "@/components/CardCollectionDetailView";
 
-function CollectionPage() {
+function ComposerPage() {
   const { collectionId } = useParams<{ collectionId: string }>();
   const [cards, setCards] = React.useState<Card[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
@@ -71,4 +71,4 @@ function CollectionPage() {
   );
 }
 
-export default CollectionPage;
+export default ComposerPage;

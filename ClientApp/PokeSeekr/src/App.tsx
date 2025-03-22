@@ -5,6 +5,7 @@ import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import { ThemeProvider } from "@/components/theme-provider"
 import CollectionPage from './pages/collection'
 import SeekrPage from './pages/SeekrPage'
+import ComposerPage from './pages/composer'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
               <Route path="/" element={<SeekrPage />} />
               <Route path="/seekr" element={<SeekrPage />} />
               <Route path="/collection/:collectionId" element={<CollectionPage />} />
+              <Route path="/compose" element={<ComposerPage />} />
             </Routes>
           </div>
         </SidebarInset>

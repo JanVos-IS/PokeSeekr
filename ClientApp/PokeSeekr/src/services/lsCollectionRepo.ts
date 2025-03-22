@@ -1,5 +1,6 @@
 import { Card } from "@/interfaces/Card";
 import { Collection } from "@/interfaces/Collection";
+import { PokemonCard } from "@/types/pokemon";
 
 export function createCollection(name: string): Collection {
     let collection: Collection = {
@@ -28,6 +29,24 @@ export function DeleteCollection(collectionId: string): void {
     localStorage.removeItem(`collection_${collectionId}`);
 }
 
+export function AddCardToCollection(card: PokemonCard, collectionId: string): void {
+    let collection = GetCollection(collectionId);
+
+    if (collection) {
+        collection.cards.push(card);
+        localStorage.setItem(`collection_${collectionId}`, JSON.stringify(collection));
+    }
+}
+
+export function RemoveCardFromCollection(card: PokemonCard, collectionId: string): void {
+    let collection = GetCollection(collectionId);
+
+    if (collection) {
+        collection.cards = collection.cards.filter(c => c.tcgId !== card.tcgId);
+        localStorage.setItem(`collection_${collectionId}`, JSON.stringify(collection));
+    }
+}
+
 export function GetCollections(): Collection[] {
     let collections: Collection[] = [];
 
@@ -44,4 +63,11 @@ export function GetCollections(): Collection[] {
     }
 
     return collections;
+}
+
+export function IsCardInCollection(tcgId: string, collectionId: string): boolean {
+    const collection = GetCollection(collectionId);
+    if (!collection) return false;
+    
+    return collection.cards.some(card => card.tcgId === tcgId);
 }   

@@ -32,7 +32,7 @@ export function NavCollections({
         {collections.map((c) => (
           <SidebarMenuItem key={c.name}>
             <SidebarMenuButton asChild>
-              <Link to={`/collections/${c.id}`} title={c.name}>
+              <Link to={`/collection/${c.id}`} title={c.name}>
                 <span>{c.name}</span>
               </Link>
             </SidebarMenuButton>

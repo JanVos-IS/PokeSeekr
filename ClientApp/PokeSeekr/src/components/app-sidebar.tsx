@@ -19,14 +19,17 @@ import { Collection } from "@/interfaces/Collection"
 import { NavCollections } from "./nav-collections"
 
 let data: {
-  navMain: { name: string; url: string; emoji: string }[];
+  navMain: { name: string; url: string }[];
   favorites: { name: string; url: string; emoji: string }[];
 } = {
   navMain: [
     {
       name: "Seekr",
-      url: "/seekr",
-      emoji: "🔍",
+      url: "/seekr"
+    },
+    {
+      name: "Composer",
+      url: "/compose"
     }
   ],
   favorites: [
