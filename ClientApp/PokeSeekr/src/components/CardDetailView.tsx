@@ -3,7 +3,8 @@ import { Button } from './ui/button';
 import { X, ExternalLink } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { Card } from '@/interfaces/Card';
-// Function to safely parse JSON with error handling
+
+
 const safeParseJson = (jsonString: string | null): any => {
   if (!jsonString) return null;
   try {
@@ -21,13 +22,22 @@ interface CardDetailViewProps {
 }
 
 export function CardDetailView({ card, isOpen, onClose }: CardDetailViewProps) {
-  if (!card) return null;
-  
   const [rotateX, setRotateX] = useState(0);
   const [rotateY, setRotateY] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
   const cardContainerRef = useRef<HTMLDivElement>(null);
   const lastMoveTime = useRef(0);
+  
+  // Reset position when dialog opens/closes
+  useEffect(() => {
+    setRotateX(0);
+    setRotateY(0);
+    setIsHovering(false);
+    lastMoveTime.current = 0;
+  }, [isOpen]);
+  
+  if (!card) return null;
+  
   const THROTTLE_MS = 16; // Throttle to ~60fps
   
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -58,14 +68,6 @@ export function CardDetailView({ card, isOpen, onClose }: CardDetailViewProps) {
       setRotateX(-1 * offsetY);
     });
   };
-  
-  // Reset position when dialog opens/closes
-  useEffect(() => {
-    setRotateX(0);
-    setRotateY(0);
-    setIsHovering(false);
-    lastMoveTime.current = 0;
-  }, [isOpen]);
 
   // Calculate lighting values based on mouse position and rotation
   const shineX = 50 + rotateY * 3;
@@ -195,7 +197,7 @@ export function CardDetailView({ card, isOpen, onClose }: CardDetailViewProps) {
                 </Button>
               </a>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-6">
                 <h3 className="text-xl font-semibold border-b pb-2">Card Information</h3>
